@@ -71,11 +71,16 @@ func (c *client) AddAll() error {
 	return nil
 }
 
+// Status returns the status of the local repository
+func (c *client) Status() (string, error) {
+	status, err := RunCommand(c.repoDir, "status", "-s", c.repoDir)
+	return strings.TrimSpace(status), err
+}
+
 // IsLocalUpToDate returns a boolean based on whether the local repository
 // is up-to-date with the remote
 func (c *client) IsLocalUpToDate() bool {
-	status, _ := RunCommand(c.repoDir, "status", "-s", c.repoDir)
-	status = strings.TrimSpace(status)
+	status, _ := c.Status()
 	return len(status) == 0
 }
 
